@@ -1,7 +1,8 @@
 #ifndef FTPACCOUNT_H_
 #define FTPACCOUNT_H_
+#include <filesystem>
 #include "serverconfig.h"
-
+namespace fs = std::filesystem;
 class FTPAccount: public Account
 {
 protected:
@@ -34,10 +35,16 @@ class FTPServerConfig: public ServerConfig
 {
 private:
     unsigned short connTimeout = 0;
+    fs::path rootDir;
 public:
     FTPServerConfig();
     ~FTPServerConfig();
     void setConnTimeout(unsigned short timeout);
+    void setRootDir(const string& dir);
+    const fs::path& getRootDir(){
+        return this->rootDir;
+    }
+    
     void loadAccountsFromFile(const string& fileName);
     void loadServerConfig(const string& confFileName);
     bool isValidAccount(const string& accountName);

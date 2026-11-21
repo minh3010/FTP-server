@@ -4,7 +4,7 @@
 
 #include "cli.h"
 #include "ftpserver.h"
-#include <windows.h>
+//#include <windows.h>
 
 class ServerCLI : public CmdLineInterface
 {

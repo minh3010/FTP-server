@@ -31,7 +31,7 @@ struct FTPSessionInfo
     //uint8_t  status;
     string username;
     string currDir="/";
-    bool loggedIn;
+    bool loggedIn=false;
 };
 
 class FTPSession : public Session
@@ -39,7 +39,6 @@ class FTPSession : public Session
     FTPSessionInfo* info;
     string response;
     void reset();
-    void saveEmail();
     FTPServerConfig* getServerConfig(){return (FTPServerConfig*)conf;}
 public:
     FTPSession(TcpSocket* slave,ServerConfig* conf);

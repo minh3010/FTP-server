@@ -9,6 +9,7 @@
 #include "socket.h"
 
 #ifdef _WIN32
+#define WIN32_LEAN_AND_MEAN
 #include <winsock2.h> // For socket(), connect(), send(), and recv()
 #include <ws2tcpip.h>
 typedef int socklen_t;

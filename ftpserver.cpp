@@ -43,6 +43,9 @@ void FTPServer::loadServerConfig(const string& confFileName) {
                 } else if (strcmp(name, "conn-timeout") == 0) {
                     unsigned short connTimeout = atoi(value);
                     getServerConfig()->setConnTimeout(connTimeout);
+                } else if(strcmp(name,"root-dir")==0)
+                {
+                    getServerConfig()->setRootDir(value);
                 } else if(strcmp(name,"logging")==0)
                 {
                     if(strcmp(value,"yes")==0)
@@ -60,6 +63,12 @@ void FTPServer::loadServerConfig(const string& confFileName) {
                 }
             }
         }
+        fs::path rootDir = getServerConfig()->getRootDir();
+        if(rootDir.is_relative())
+        {
+            rootDir = fs::current_path() / rootDir;
+        }
+        getServerConfig()->setRootDir(fs::weakly_canonical(rootDir));
         cout << "FTP Server config loaded from file: " << confFileName << endl;
         f.close();
     }
@@ -83,7 +92,7 @@ void FTPServer::cleanServer(){
         logFile->close();
         delete logFile;
         logFile = NULL;
-    }    
+    }
     conf->removeAllAccount();
 }
 int FTPServer::readCmd(TcpSocket* slave, char* buffer, int buflen)
@@ -165,7 +174,7 @@ void FTPServer::startNewSession(TcpSocket* slave)
             if(cmdLen <= 0)
                 break;
             // Phan tich lenh
-            cmdId = parseCmd(cmdBuffer, cmdLen, cmdArgv, cmdArgc );           
+            cmdId = parseCmd(cmdBuffer, cmdLen, cmdArgv, cmdArgc );
             // Thuc hien lenh
             doCmd(session,cmdId,cmdArgv,cmdArgc);
             if(logging)

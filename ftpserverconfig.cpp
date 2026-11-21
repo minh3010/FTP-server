@@ -40,6 +40,10 @@ void FTPServerConfig::setConnTimeout(unsigned short timeout)
 {
     connTimeout = timeout;
 }
+void FTPServerConfig::setRootDir(const string& dir)
+{
+    rootDir = dir;
+}
 
 void FTPServerConfig::loadServerConfig(const string& confFileName)
 {
