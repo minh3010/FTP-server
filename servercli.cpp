@@ -1,0 +1,75 @@
+#include <iostream>
+#include "servercli.h"
+
+ServerCLI::ServerCLI():CmdLineInterface("server>")
+{
+    ftp = new FTPServer();
+    initCmd();
+
+    if(ftp->start())
+        cout << "FTP Server started" << endl;
+    else
+        cout << "FTP Server failed to start" <<endl;
+
+}
+ServerCLI::~ServerCLI()
+{
+    delete ftp;
+}
+
+void ServerCLI::initCmd()
+{
+    addCmd("start",CLI_CAST(&ServerCLI::doStart));
+    addCmd("stop",CLI_CAST(&ServerCLI::doStop));
+    addCmd("restart",CLI_CAST(&ServerCLI::doRestart));
+    addCmd("status",CLI_CAST(&ServerCLI::doStatus));
+    addCmd("help", CLI_CAST(&ServerCLI::doHelp));
+}
+
+void ServerCLI::doStart(char * cmd_argv[], int cmd_argc)
+{
+    if(ftp->isRunning())
+        cout << "FTP server is running!" << endl;
+    else if(ftp->start())
+        cout << "FTP Server started" << endl;
+    else
+        cout << "FTP Server failed to start" <<endl;
+}
+
+void ServerCLI::doStop(char * cmd_argv[], int cmd_argc)
+{
+    ftp->stop();
+    cout << "FTP Server stopped" << endl;
+}
+
+
+
+void ServerCLI::doRestart(char * cmd_argv[], int cmd_argc)
+{
+
+    if(ftp->restart())
+        cout << "FTP Server restarted" << endl;
+    else
+        cout << "FTP Server failed to restart" <<endl;
+
+}
+
+void ServerCLI::doStatus(char * cmd_argv[], int cmd_argc)
+{
+
+    if(ftp->isRunning())
+        cout << "FTP Server is running\n";
+    else
+        cout << "FTP Server is not running\n";
+
+}
+
+void ServerCLI::doHelp(char * cmd_argv[], int cmd_argc)
+{
+    cout << "Cac lenh cua chuong trinh:" << endl;
+    cout << "- start               Bat FTP server" << endl;
+    cout << "- stop                Tat FTP server" << endl;
+    cout << "- status              Trang thai FTP server" << endl;
+    cout << "- help                Tro giup" << endl;
+    cout << "- quit                Thoat" << endl;
+}
